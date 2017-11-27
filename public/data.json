@@ -1,0 +1,49 @@
+{
+    "data": {
+        "dataList": [
+            {
+                "id": "id0",
+                "title": "id0 title",
+                "children": [
+                    {
+                        "text": "text0",
+                        "next": "id1"
+                    },
+                    {
+                        "text": "text1",
+                        "next": "id2"
+                    },
+                    {
+                        "text": "text2",
+                        "next": "id3"
+                    }
+                ]
+            },
+            {
+                "id": "id1",
+                "title": "id1 title",
+                "children": [
+                    {
+                        "text": "text3",
+                        "next": "id3"
+                    }
+                ]
+            },
+            {
+                "id": "id2",
+                "title": "id2 title",
+                "children": [
+                ]
+            },
+            {
+                "id": "id3",
+                "title": "id3 title",
+                "children": [
+                ]
+            }
+        ],
+        "entry": "id0"
+    },
+    "status": 0,
+    "statusInfo": ""
+}
