@@ -1,6 +1,6 @@
 {
   "name": "control-flow-graph",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A control flow graph display in browser",
   "main": "lib/index.js",
   "scripts": {
