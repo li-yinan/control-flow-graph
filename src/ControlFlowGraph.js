@@ -1,15 +1,13 @@
 import React from 'react'
 import './controlflow.less'
-import {
-    drag,
-    event,
-    select
-} from 'd3';
-import d3 from 'd3';
+import {drag} from 'd3-drag';
+import {select, event} from 'd3-selection';
 import sankey from './sankey/sankey';
 import sankeyLinkHorizontal from './sankey/sankeyLinkHorizontal';
 
 import data from './data';
+
+// let event = select.event;
 
 let noop = function () {};
 export default class ControlFlowGraph extends React.Component {

@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: [
     "./app/app", // Your appʼs entry point
-    "./src/index" // Your appʼs entry point
+    //"./src/index" // Your appʼs entry point
   ],
   devtool: process.env.WEBPACK_DEVTOOL || "source-map",
   output: {
