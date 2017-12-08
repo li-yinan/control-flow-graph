@@ -1,6 +1,7 @@
 import React from 'react'
 import './controlflow.less'
 import {drag} from 'd3-drag';
+import {zoom} from 'd3-zoom';
 import {select, event} from 'd3-selection';
 import sankey from './sankey/sankey';
 import sankeyLinkHorizontal from './sankey/sankeyLinkHorizontal';
@@ -18,10 +19,10 @@ export default class ControlFlowGraph extends React.Component {
         let svg = select(rootDom);
         let width = +svg.attr("width");
         let height = +svg.attr("height");
+        let g = svg.append('g');
         let layout = sankey().extent([[1, 1], [width - 1, height - 6]]);;
         let graph = layout(data);
-        console.log(data.nodes);
-        let node = svg.append('g').selectAll('g');
+        let node = g.append('g').selectAll('g');
         node = node.data(data.nodes).enter().append('rect');
         node
             .attr("x", function(d) { return d.x0; })
@@ -29,7 +30,7 @@ export default class ControlFlowGraph extends React.Component {
             .attr("height", function(d) { return d.y1 - d.y0; })
             .attr("width", function(d) { return d.x1 - d.x0; })
             .attr("stroke", "#000");
-        let link = svg.append("g")
+        let link = g.append("g")
             .attr("class", "links")
             .attr("fill", "none")
             .attr("stroke", "#000")
@@ -46,8 +47,8 @@ export default class ControlFlowGraph extends React.Component {
             let height = el.attr('height') - 0;
             e.y0 = event.y;
             e.x0 = event.x;
-            e.y1 = event.y;
-            e.x1 = event.x;
+            e.y1 = event.y + e.y1 - e.y0;
+            e.x1 = event.x + e.x1 - e.x0;
             
             select(this)
                 // .attr('x', Math.max(0, Math.min(width - event.dx, event.x)) + event.x)
@@ -69,6 +70,11 @@ export default class ControlFlowGraph extends React.Component {
                 .on('drag', dragmove)
         );
 
+        let zoomer = zoom().scaleExtent([1, 10])
+            .on('zoom', function (d) {
+                g.attr('transform', event.transform);
+            });
+        svg.call(zoomer);
     }
 
     render() {

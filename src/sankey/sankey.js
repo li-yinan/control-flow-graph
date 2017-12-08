@@ -1,6 +1,6 @@
 import {ascending, min, sum} from "d3-array";
 import {map, nest} from "d3-collection";
-import {justify} from "./align";
+import {justify, left} from "./align";
 import constant from "./constant";
 
 function ascendingSourceBreadth(a, b) {
@@ -54,7 +54,7 @@ export default function() {
         dx = 24, // nodeWidth
         py = 8, // nodePadding
         id = defaultId,
-        align = justify,
+        align = left,
         nodes = defaultNodes,
         links = defaultLinks,
         iterations = 32;
@@ -132,7 +132,6 @@ export default function() {
     // Compute the value (size) of each node by summing the associated links.
     function computeNodeValues(graph) {
         graph.nodes.forEach(function(node) {
-            // node.value = 10;
             node.value = Math.max(
                 sum(node.sourceLinks, value),
                 sum(node.targetLinks, value)
@@ -187,7 +186,6 @@ export default function() {
             .entries(graph.nodes)
             .map(function(d) { return d.values; });
 
-        //
         initializeNodeBreadth();
         resolveCollisions();
         for (var alpha = 1, n = iterations; n > 0; --n) {
@@ -274,13 +272,26 @@ export default function() {
             node.sourceLinks.sort(ascendingTargetBreadth);
             node.targetLinks.sort(ascendingSourceBreadth);
         });
+        // graph.nodes.forEach(function(node) {
+        //     var y0 = node.y0, y1 = y0;
+        //     node.sourceLinks.forEach(function(link) {
+        //         link.y0 = y0 + link.width / 2, y0 += link.width;
+        //     });
+        //     node.targetLinks.forEach(function(link) {
+        //         link.y1 = y1 + link.width / 2, y1 += link.width;
+        //     });
+        // });
         graph.nodes.forEach(function(node) {
-            var y0 = node.y0, y1 = y0;
+
+            var y0 = node.y0;
+            var y1 = node.y1;
+
             node.sourceLinks.forEach(function(link) {
-                link.y0 = y0 + link.width / 2, y0 += link.width;
+                link.y0 = (y0 + y1) / 2;
             });
+
             node.targetLinks.forEach(function(link) {
-                link.y1 = y1 + link.width / 2, y1 += link.width;
+                link.y1 = (y0 + y1) / 2;
             });
         });
     }
