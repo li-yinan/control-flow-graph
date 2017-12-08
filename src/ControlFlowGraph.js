@@ -25,6 +25,7 @@ export default class ControlFlowGraph extends React.Component {
         let node = g.append('g').selectAll('g');
         node = node.data(data.nodes).enter().append('rect');
         node
+            .attr("name", d => d.name)
             .attr("x", function(d) { return d.x0; })
             .attr("y", function(d) { return d.y0; })
             .attr("height", function(d) { return d.y1 - d.y0; })
@@ -41,20 +42,20 @@ export default class ControlFlowGraph extends React.Component {
             .enter().append("path")
             .attr("d", sankeyLinkHorizontal())
             // .attr("stroke-width", function(d) { return Math.max(1, d.width); });
-        function dragmove(e) {
+        function dragmove(d) {
             let el = select(this);
             let width = el.attr('width') - 0;
             let height = el.attr('height') - 0;
-            e.y0 = event.y;
-            e.x0 = event.x;
-            e.y1 = event.y + e.y1 - e.y0;
-            e.x1 = event.x + e.x1 - e.x0;
+            d.y0 = event.y;
+            d.x0 = event.x;
+            d.y1 = event.y + height;
+            d.x1 = event.x + width;
             
             select(this)
                 // .attr('x', Math.max(0, Math.min(width - event.dx, event.x)) + event.x)
                 // .attr('y', Math.max(0, Math.min(height - event.dy, event.y)) + event.y);
-                .attr('x', e.x0)
-                .attr('y', e.y0);
+                .attr('x', d.x0)
+                .attr('y', d.y0);
             layout.update(data);
             link.attr("d", sankeyLinkHorizontal());
         }
@@ -70,7 +71,7 @@ export default class ControlFlowGraph extends React.Component {
                 .on('drag', dragmove)
         );
 
-        let zoomer = zoom().scaleExtent([1, 10])
+        let zoomer = zoom().scaleExtent([0.1, 10])
             .on('zoom', function (d) {
                 g.attr('transform', event.transform);
             });
